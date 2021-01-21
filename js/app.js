@@ -1,5 +1,5 @@
-import * as THREE from './three.js/build/three.module.js';
-import {OBJLoader} from './three.js/examples/jsm/loaders/OBJLoader.js';
+import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import {OBJLoader} from 'https://unpkg.com/three/examples/jsm/loaders/OBJLoader.js';
 
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
