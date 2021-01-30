@@ -1,5 +1,5 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import {OBJLoader} from 'https://unpkg.com/three/examples/jsm/loaders/OBJLoader.js';
+import { OBJLoader } from 'https://unpkg.com/three/examples/jsm/loaders/OBJLoader.js';
 import { GLTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/GLTFLoader.js';
 
 let windowHalfX = window.innerWidth / 2;
@@ -8,65 +8,65 @@ let mouseX = 0, mouseY = 0;
 
 // document.addEventListener('mousemove', onDocumentMouseMove, false );
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
-camera.position.set(30, 3, 0); 
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.set(30, 3, 0);
 // camera.position.set(0, 0, 15);
 // camera.position.set(10, 7, 0);
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 var manager = new THREE.LoadingManager();
-manager.onProgress = function ( item, loaded, total ) {
-    console.log( item, loaded, total );
+manager.onProgress = function (item, loaded, total) {
+    console.log(item, loaded, total);
 };
 
 let Kirby;
 // This format already sets the texture, just need the files
 var loader = new GLTFLoader();
-loader.load( '../models/scene.gltf', function ( gltf ) {
+loader.load('../models/scene.gltf', function (gltf) {
     Kirby = gltf.scene;
     Kirby.rotation.set(0, Math.PI, 0);
     Kirby.position.set(23.5, 0, 0);
-	scene.add( Kirby );
+    scene.add(Kirby);
 
-}, undefined, function ( error ) {
+}, undefined, function (error) {
 
-	console.error( error );
+    console.error(error);
 
-} );
-var kirbyBottomLight = new THREE.PointLight( 0xfff07f, 1, 10 )
+});
+var kirbyBottomLight = new THREE.PointLight(0xfff07f, 1, 10)
 scene.add(kirbyBottomLight);
-let kirbyFaceLight = new THREE.PointLight( 0xfff07f, 1, 10 )
+let kirbyFaceLight = new THREE.PointLight(0xfff07f, 1, 10)
 scene.add(kirbyFaceLight);
 
 // Set up a really dim and smooth blueish ambient light (its nightime)
-const ambientLight = new THREE.AmbientLight( 0x0055a5, 0.1 );
-scene.add( ambientLight );
+const ambientLight = new THREE.AmbientLight(0x0055a5, 0.1);
+scene.add(ambientLight);
 // Set up the biggest light source which is the moonlight
-var moonLight = new THREE.DirectionalLight( 0xd9dee0, 0.4);
-moonLight.position.set( 0, 25, 0 ).normalize();
-scene.add( moonLight );
+var moonLight = new THREE.DirectionalLight(0xd9dee0, 0.4);
+moonLight.position.set(0, 25, 0).normalize();
+scene.add(moonLight);
 
 // Create moon
-const materialMoon = new THREE.MeshBasicMaterial( { color: 0x9b9b9b });
+const materialMoon = new THREE.MeshBasicMaterial({ color: 0x9b9b9b });
 const moon = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 32), materialMoon);
 moon.position.set(0, 15, 0);
 scene.add(moon);
 
 // Create ground
 const groundSize = 50;
-const groundGeometry = new THREE.PlaneGeometry( groundSize, groundSize);
+const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize);
 var textureLoader = new THREE.TextureLoader();
-var groundTexture = textureLoader.load( "../models/textures/stone_path.jpg" );
+var groundTexture = textureLoader.load("../models/textures/stone_path.jpg");
 groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
 groundTexture.repeat.set(groundSize, groundSize);
-const ground = new THREE.Mesh( groundGeometry, new THREE.MeshLambertMaterial({ map: groundTexture, side: THREE.DoubleSide }) );
+const ground = new THREE.Mesh(groundGeometry, new THREE.MeshLambertMaterial({ map: groundTexture, side: THREE.DoubleSide }));
 ground.position.set(0, -0.01, 0);
 ground.rotation.set(Math.PI / 2, 0, 0);
-scene.add( ground );
-
+scene.add(ground);
+document.addEventListener('keydown', onDocumentKeyDown, false);
 // Create walls
 var walls = [];
 var wallHeight = 3;
@@ -97,27 +97,27 @@ function makeWall(width, height, depth, position) {
     var wallGeometry = new THREE.BoxGeometry(width, height, depth);
     var materials = [];
     // right
-    var wallTexture = textureLoader.load( "../models/textures/hedge.jpg" );
+    var wallTexture = textureLoader.load("../models/textures/hedge.jpg");
     wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
     wallTexture.repeat.set(depth, height);
     materials.push(new THREE.MeshLambertMaterial({ map: wallTexture }));
     // left
     materials.push(new THREE.MeshLambertMaterial({ map: wallTexture }));
     // top
-    wallTexture = textureLoader.load( "../models/textures/hedge.jpg" );
+    wallTexture = textureLoader.load("../models/textures/hedge.jpg");
     wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
     wallTexture.repeat.set(width, depth);
     materials.push(new THREE.MeshLambertMaterial({ map: wallTexture }));
     // bottom
     materials.push(new THREE.MeshLambertMaterial({ map: wallTexture }));
     // front
-    wallTexture = textureLoader.load( "../models/textures/hedge.jpg" );
+    wallTexture = textureLoader.load("../models/textures/hedge.jpg");
     wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
     wallTexture.repeat.set(width, height);
     materials.push(new THREE.MeshLambertMaterial({ map: wallTexture }));
     // back
     materials.push(new THREE.MeshLambertMaterial({ map: wallTexture }));
-    
+
     var wall = new THREE.Mesh(wallGeometry, materials);
 
     wall.position.set(position.x, position.y, position.z);
@@ -125,7 +125,7 @@ function makeWall(width, height, depth, position) {
 }
 
 const animate = function () {
-    requestAnimationFrame( animate );
+    requestAnimationFrame(animate);
     render();
 };
 
@@ -134,19 +134,34 @@ const animate = function () {
 //     mouseY = ( event.clientY - windowHalfY ) / 2;
 // }
 
+function onDocumentKeyDown(event) {
+    if (Kirby) {
+        var speed = 0.1
+        if (event.keyCode == 87) {
+            Kirby.position.z -= speed;
+        } else if (event.keyCode == 83) {
+            Kirby.position.z -= speed;
+        } else if (event.keyCode == 65) {
+            Kirby.position.x -= speed;
+        } else if (event.keyCode == 68) {
+            Kirby.position.x += speed;
+        }
+        render();
+    }
+};
+
 function render() {
     // camera.position.x += ( mouseX - camera.position.x ) * .05;
     // camera.position.y += ( - mouseY - camera.position.y ) * .05;
     if (kirbyFaceLight && Kirby) {
         // console.log("setKirboLight");
-        kirbyFaceLight.position.set(Kirby.position.x, Kirby.position.y+1, Kirby.position.z);
-        kirbyBottomLight.position.set(Kirby.position.x, Kirby.position.y-1, Kirby.position.z);
-        camera.lookAt( new THREE.Vector3(Kirby.position.x, Kirby.position.y + 2, Kirby.position.z) );
+        kirbyFaceLight.position.set(Kirby.position.x, Kirby.position.y + 1, Kirby.position.z);
+        kirbyBottomLight.position.set(Kirby.position.x, Kirby.position.y - 1, Kirby.position.z);
+        camera.lookAt(new THREE.Vector3(Kirby.position.x, Kirby.position.y + 2, Kirby.position.z));
+    } else {
+        camera.lookAt(scene.position);
     }
-    else {
-        camera.lookAt( scene.position );
-    }
-    renderer.render(scene,camera);
+    renderer.render(scene, camera);
 }
 
 animate();
