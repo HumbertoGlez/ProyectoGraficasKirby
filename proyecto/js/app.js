@@ -45,6 +45,7 @@ const moon = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 32), materialMoon);
 moon.position.set(0, 15, 0);
 scene.add(moon);
 
+//creating te laberynth
 var walls = [];
 const material = new THREE.MeshBasicMaterial( { color: 0x136d15 } );
 walls.push(new THREE.Mesh(new THREE.BoxGeometry(44, 1, 1), material));
@@ -99,6 +100,7 @@ scene.add(walls[14]);
 scene.add(walls[15]);
 scene.add(walls[16]);
 
+//animating the object
 const animate = function () {
     requestAnimationFrame( animate );
     render();
@@ -109,6 +111,7 @@ function onDocumentMouseMove( event ) {
     mouseY = ( event.clientY - windowHalfY ) / 2;
 }
 
+//rendering the camera
 function render() {
     camera.position.x += ( mouseX - camera.position.x ) * .05;
     camera.position.y += ( - mouseY - camera.position.y ) * .05;
