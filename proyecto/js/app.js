@@ -1,11 +1,15 @@
+//libraries
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import {OBJLoader} from 'https://unpkg.com/three/examples/jsm/loaders/OBJLoader.js';
 
+//size of the screen
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
 let mouseX = 0, mouseY = 0;
 document.addEventListener('mousemove', onDocumentMouseMove, false );
+//declaration of the scene
 const scene = new THREE.Scene();
+//declaration of the camera
 const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
 camera.position.set(0, 0, 15);
 
@@ -37,9 +41,11 @@ loader.load(
     }
 );
 
+//ambient light
 const ambientLight = new THREE.AmbientLight( 0xFcd1c6, 0.75);
 scene.add( ambientLight );
 
+//setting the moon
 const materialMoon = new THREE.MeshBasicMaterial( { color: 0x9b9b9b });
 const moon = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 32), materialMoon);
 moon.position.set(0, 15, 0);
